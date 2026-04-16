@@ -1,0 +1,14 @@
+{
+  "name": "book-a-barber-online",
+  "version": "1.0.0",
+  "description": "Deployable barber reservation system with admin and barber panels",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1"
+  }
+}
