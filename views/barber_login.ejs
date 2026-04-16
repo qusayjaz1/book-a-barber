@@ -1,0 +1,19 @@
+<%- include('partials/header', { title: 'Barber login' }) %>
+<section class="center-wrap">
+  <form class="card narrow" method="post" action="/barber/login">
+    <h1>Barber login</h1>
+    <% if (error) { %><div class="notice error"><%= error %></div><% } %>
+    <label>Choose barber
+      <select name="barber_id" required>
+        <option value="">Select barber</option>
+        <% barbers.forEach(barber => { %>
+          <option value="<%= barber.id %>"><%= barber.name %></option>
+        <% }) %>
+      </select>
+    </label>
+    <label>Barber PIN<input type="password" name="pin" required /></label>
+    <button class="btn primary" type="submit">Open barber panel</button>
+    <p class="muted">Default test PINs: Adam 1111, Leo 2222</p>
+  </form>
+</section>
+<%- include('partials/footer') %>

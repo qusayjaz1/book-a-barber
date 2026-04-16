@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: 'Edit barber' }) %>
+<section class="card">
+  <h1>Edit barber</h1>
+  <form method="post" action="/admin/barbers/<%= barber.id %>/edit" class="stack-form">
+    <label>Name<input name="name" value="<%= barber.name %>" required /></label>
+    <label>Specialty<input name="specialty" value="<%= barber.specialty %>" /></label>
+    <label>Phone<input name="phone" value="<%= barber.phone %>" /></label>
+    <label>Email<input name="email" value="<%= barber.email %>" /></label>
+    <label>PIN<input name="pin" value="<%= barber.pin %>" required /></label>
+    <label>Photo URL<input name="photo_url" value="<%= barber.photo_url %>" /></label>
+    <label class="checkline"><input type="checkbox" name="active" <%= barber.active ? 'checked' : '' %> /> Active</label>
+
+    <h2>Working days and hours</h2>
+    <div class="schedule-grid">
+      <% schedule.forEach(day => { %>
+        <div class="schedule-card">
+          <label class="checkline"><input type="checkbox" name="enabled_<%= day.weekday %>" <%= day.enabled ? 'checked' : '' %> /> <strong><%= weekdays[day.weekday] %></strong></label>
+          <label>Start<input type="time" name="start_<%= day.weekday %>" value="<%= day.start_time %>" /></label>
+          <label>End<input type="time" name="end_<%= day.weekday %>" value="<%= day.end_time %>" /></label>
+          <label>Slot minutes<input type="number" min="10" step="5" name="slot_<%= day.weekday %>" value="<%= day.slot_minutes %>" /></label>
+          <label>Break start<input type="time" name="break_start_<%= day.weekday %>" value="<%= day.break_start %>" /></label>
+          <label>Break end<input type="time" name="break_end_<%= day.weekday %>" value="<%= day.break_end %>" /></label>
+        </div>
+      <% }) %>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" type="submit">Save barber</button>
+      <a class="btn ghost" href="/admin">Back</a>
+    </div>
+  </form>
+</section>
+<%- include('partials/footer') %>

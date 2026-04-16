@@ -1,0 +1,11 @@
+<%- include('partials/header', { title: 'Admin login' }) %>
+<section class="center-wrap">
+  <form class="card narrow" method="post" action="/admin/login">
+    <h1>Admin login</h1>
+    <% if (error) { %><div class="notice error"><%= error %></div><% } %>
+    <label>Admin PIN<input type="password" name="pin" required /></label>
+    <button class="btn primary" type="submit">Enter admin panel</button>
+    <p class="muted">Default PIN: 1234</p>
+  </form>
+</section>
+<%- include('partials/footer') %>

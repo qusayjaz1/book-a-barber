@@ -1,0 +1,70 @@
+<%- include('partials/header', { title: 'Edit reservation' }) %>
+<section class="card">
+  <h1><%= editorType %> edit reservation</h1>
+  <form method="post" action="<%= actionBase %>/reservations/<%= reservation.id %>/edit" class="stack-form slot-aware-form">
+    <label>Customer number<input value="<%= reservation.customer_number %>" disabled /></label>
+    <label>Customer name<input name="customer_name" value="<%= reservation.customer_name %>" required /></label>
+    <label>Phone<input name="customer_phone" value="<%= reservation.customer_phone %>" required /></label>
+    <label>Service<input name="service" value="<%= reservation.service %>" required /></label>
+    <label>Barber
+      <select name="barber_id" class="slot-barber" <%= barbers.length === 1 ? 'disabled' : '' %> required>
+        <% barbers.forEach(barber => { %>
+          <option value="<%= barber.id %>" <%= reservation.barber_id === barber.id ? 'selected' : '' %>><%= barber.name %></option>
+        <% }) %>
+      </select>
+      <% if (barbers.length === 1) { %><input type="hidden" name="barber_id" value="<%= reservation.barber_id %>" /><% } %>
+    </label>
+    <label>Date<input type="date" name="reservation_date" class="slot-date" value="<%= reservation.reservation_date %>" required /></label>
+    <div>
+      <span class="label">Available times</span>
+      <div class="slot-grid dynamic-slots"><div class="muted">Loading...</div></div>
+      <input type="hidden" name="reservation_time" class="slot-time" value="<%= reservation.reservation_time %>" required />
+    </div>
+    <label>Status
+      <select name="status">
+        <% ['pending','confirmed','done','cancelled'].forEach(status => { %>
+          <option value="<%= status %>" <%= reservation.status === status ? 'selected' : '' %>><%= status %></option>
+        <% }) %>
+      </select>
+    </label>
+    <label>Notes<textarea name="notes" rows="4"><%= reservation.notes %></textarea></label>
+    <div class="actions">
+      <button class="btn primary" type="submit">Save changes</button>
+      <a class="btn ghost" href="<%= actionBase %>">Back</a>
+    </div>
+  </form>
+</section>
+<script>
+  const form = document.querySelector('.slot-aware-form');
+  const barber = form.querySelector('.slot-barber');
+  const date = form.querySelector('.slot-date');
+  const slotWrap = form.querySelector('.dynamic-slots');
+  const slotTime = form.querySelector('.slot-time');
+  async function reload() {
+    const barberId = barber ? barber.value : '<%= reservation.barber_id %>';
+    const d = date.value;
+    const currentValue = slotTime.value;
+    if (!barberId || !d) return;
+    const r = await fetch(`/api/slots?barber_id=${barberId}&date=${d}&ignore_id=<%= reservation.id %>`);
+    const data = await r.json();
+    const slots = Array.from(new Set([currentValue, ...data.slots])).sort();
+    slotWrap.innerHTML = '';
+    slots.forEach(slot => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot-btn';
+      btn.textContent = slot;
+      if (slot === currentValue) btn.classList.add('active');
+      btn.onclick = () => {
+        slotWrap.querySelectorAll('.slot-btn').forEach(x => x.classList.remove('active'));
+        btn.classList.add('active');
+        slotTime.value = slot;
+      };
+      slotWrap.appendChild(btn);
+    });
+  }
+  if (barber) barber.addEventListener('change', reload);
+  date.addEventListener('change', reload);
+  reload();
+</script>
+<%- include('partials/footer') %>

@@ -1,0 +1,166 @@
+{
+  "settings": {
+    "shop_name": "Book A Barber",
+    "shop_location": "Add your shop location",
+    "shop_headline": "Clean cuts. Easy booking.",
+    "shop_whatsapp": "",
+    "admin_pin": "1234"
+  },
+  "counters": {
+    "barber": 2,
+    "reservation": 0
+  },
+  "barbers": [
+    {
+      "id": 1,
+      "name": "Adam",
+      "specialty": "Fade & Beard",
+      "phone": "",
+      "email": "",
+      "pin": "1111",
+      "photo_url": "",
+      "active": true,
+      "schedule": [
+        {
+          "weekday": 0,
+          "enabled": false,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 1,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 2,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 3,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 4,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 5,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 6,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Leo",
+      "specialty": "Classic & Style",
+      "phone": "",
+      "email": "",
+      "pin": "2222",
+      "photo_url": "",
+      "active": true,
+      "schedule": [
+        {
+          "weekday": 0,
+          "enabled": false,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 1,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 2,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 3,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 4,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 5,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        },
+        {
+          "weekday": 6,
+          "enabled": true,
+          "start_time": "09:00",
+          "end_time": "18:00",
+          "slot_minutes": 30,
+          "break_start": "13:00",
+          "break_end": "14:00"
+        }
+      ]
+    }
+  ],
+  "reservations": []
+}

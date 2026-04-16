@@ -1,0 +1,25 @@
+<%- include('partials/header', { title: 'Reservation ticket' }) %>
+<section class="card ticket">
+  <div class="ticket-top">
+    <div>
+      <span class="eyebrow">Reservation confirmed</span>
+      <h1>Your customer number is <span class="accent"><%= reservation.customer_number %></span></h1>
+    </div>
+    <div class="ticket-badge"><%= reservation.status %></div>
+  </div>
+  <div class="ticket-grid">
+    <div><span>Name</span><strong><%= reservation.customer_name %></strong></div>
+    <div><span>Phone</span><strong><%= reservation.customer_phone %></strong></div>
+    <div><span>Barber</span><strong><%= reservation.barber_name %></strong></div>
+    <div><span>Service</span><strong><%= reservation.service %></strong></div>
+    <div><span>Date</span><strong><%= reservation.reservation_date %></strong></div>
+    <div><span>Time</span><strong><%= reservation.reservation_time %></strong></div>
+  </div>
+  <% if (reservation.notes) { %>
+    <div class="ticket-notes"><span>Notes</span><strong><%= reservation.notes %></strong></div>
+  <% } %>
+  <div class="actions">
+    <a class="btn primary" href="/">Back to booking</a>
+  </div>
+</section>
+<%- include('partials/footer') %>
