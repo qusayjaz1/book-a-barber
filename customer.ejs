@@ -1,0 +1,104 @@
+<%- include('partials/header', { title: 'Book Appointment' }) %>
+<section class="hero card soft">
+  <div>
+    <span class="eyebrow">Online booking</span>
+    <h1><%= shop.shop_headline || 'Clean cuts. Easy booking.' %></h1>
+    <p><strong><%= shop.shop_name %></strong><br><%= shop.shop_location %></p>
+  </div>
+  <div class="hero-badge">Shared online system</div>
+</section>
+
+<% if (message) { %><div class="notice success"><%= message %></div><% } %>
+<% if (error) { %><div class="notice error"><%= error %></div><% } %>
+
+<section class="grid two-col">
+  <div class="card">
+    <h2>Reserve now</h2>
+    <form method="post" action="/book" id="bookingForm">
+      <label>Customer name<input name="customer_name" required /></label>
+      <label>Phone number<input name="customer_phone" required /></label>
+      <label>Service<input name="service" placeholder="Haircut / Beard / Style" required /></label>
+      <label>Choose barber
+        <select name="barber_id" id="barberSelect" required>
+          <option value="">Select barber</option>
+          <% barbers.forEach(barber => { %>
+            <option value="<%= barber.id %>"><%= barber.name %> — <%= barber.specialty %></option>
+          <% }) %>
+        </select>
+      </label>
+      <label>Date<input type="date" name="reservation_date" id="dateInput" min="<%= today %>" required /></label>
+      <div>
+        <span class="label">Available times</span>
+        <div id="slots" class="slot-grid"><div class="muted">Choose barber and date first</div></div>
+        <input type="hidden" name="reservation_time" id="reservationTime" required />
+      </div>
+      <label>Notes<textarea name="notes" rows="3" placeholder="Optional"></textarea></label>
+      <button class="btn primary" type="submit">Reserve now</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Meet the barbers</h2>
+    <div class="barber-cards">
+      <% barbers.forEach(barber => { %>
+        <div class="barber-card">
+          <div class="avatar">
+            <% if (barber.photo_url) { %>
+              <img src="<%= barber.photo_url %>" alt="<%= barber.name %>" />
+            <% } else { %>
+              <span><%= barber.name.charAt(0) %></span>
+            <% } %>
+          </div>
+          <div>
+            <strong><%= barber.name %></strong>
+            <div class="muted"><%= barber.specialty || 'Barber' %></div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    <% if (shop.shop_whatsapp) { %>
+      <a class="btn ghost full" target="_blank" href="https://wa.me/<%= shop.shop_whatsapp.replace(/\D/g,'') %>">Contact on WhatsApp</a>
+    <% } %>
+  </div>
+</section>
+
+<script>
+  const barberSelect = document.getElementById('barberSelect');
+  const dateInput = document.getElementById('dateInput');
+  const slotsBox = document.getElementById('slots');
+  const reservationTime = document.getElementById('reservationTime');
+
+  async function loadSlots() {
+    const barberId = barberSelect.value;
+    const date = dateInput.value;
+    reservationTime.value = '';
+    if (!barberId || !date) {
+      slotsBox.innerHTML = '<div class="muted">Choose barber and date first</div>';
+      return;
+    }
+    slotsBox.innerHTML = '<div class="muted">Loading slots...</div>';
+    const response = await fetch(`/api/slots?barber_id=${barberId}&date=${date}`);
+    const data = await response.json();
+    if (!data.slots.length) {
+      slotsBox.innerHTML = '<div class="muted">No free time on this date</div>';
+      return;
+    }
+    slotsBox.innerHTML = '';
+    data.slots.forEach(slot => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot-btn';
+      btn.textContent = slot;
+      btn.onclick = () => {
+        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        reservationTime.value = slot;
+      };
+      slotsBox.appendChild(btn);
+    });
+  }
+
+  barberSelect.addEventListener('change', loadSlots);
+  dateInput.addEventListener('change', loadSlots);
+</script>
+<%- include('partials/footer') %>

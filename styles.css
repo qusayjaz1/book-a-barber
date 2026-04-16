@@ -1,0 +1,106 @@
+:root {
+  --bg: #12091d;
+  --bg-2: #1b1030;
+  --card: rgba(255,255,255,.08);
+  --card-strong: rgba(255,255,255,.12);
+  --line: rgba(255,255,255,.14);
+  --text: #f7efff;
+  --muted: #cdbadd;
+  --accent: #ff5fa2;
+  --accent-2: #8d6dff;
+  --success: #27c29a;
+  --danger: #ff6b7d;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top left, #442464 0, transparent 30%), radial-gradient(circle at bottom right, #32113b 0, transparent 35%), linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  min-height: 100vh;
+}
+.bg-orb { position: fixed; width: 320px; height: 320px; border-radius: 50%; filter: blur(70px); opacity: .35; pointer-events: none; }
+.orb-a { background: #ff5fa2; top: -60px; right: -80px; }
+.orb-b { background: #8d6dff; left: -80px; bottom: -80px; }
+.topbar {
+  position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 24px; backdrop-filter: blur(14px); background: rgba(18,9,29,.6); border-bottom: 1px solid var(--line);
+}
+.topbar nav { display: flex; gap: 14px; flex-wrap: wrap; }
+.topbar a { color: var(--text); text-decoration: none; opacity: .92; }
+.brand { font-weight: 800; letter-spacing: .02em; }
+.shell { max-width: 1180px; margin: 0 auto; padding: 26px 18px 60px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 22px; backdrop-filter: blur(14px);
+  box-shadow: 0 14px 40px rgba(0,0,0,.18);
+}
+.soft { background: linear-gradient(135deg, rgba(255,95,162,.15), rgba(141,109,255,.12)); }
+.hero { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+.hero-badge, .ticket-badge { padding: 12px 16px; border-radius: 999px; background: rgba(255,255,255,.12); font-weight: 700; }
+.eyebrow { display: inline-block; color: #ffbed7; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+h1, h2, h3 { margin: 0 0 12px; }
+p { color: var(--muted); line-height: 1.5; }
+.grid { display: grid; gap: 18px; }
+.two-col { grid-template-columns: 1.2fr .8fr; }
+.stack-top { margin-top: 18px; }
+label, .label { display: block; font-size: .94rem; color: #f8e7ff; margin-bottom: 12px; }
+input, select, textarea, button {
+  font: inherit;
+}
+input, select, textarea {
+  width: 100%; margin-top: 7px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.08);
+  color: var(--text); padding: 13px 14px; outline: none;
+}
+textarea { resize: vertical; }
+.btn {
+  display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 12px 16px; border: 0; border-radius: 16px;
+  text-decoration: none; cursor: pointer; color: white; background: rgba(255,255,255,.12); min-height: 46px;
+}
+.btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+.btn.ghost { background: rgba(255,255,255,.08); }
+.btn.danger { background: rgba(255,107,125,.18); color: #ffd7dc; }
+.btn.small { min-height: 38px; padding: 8px 12px; border-radius: 12px; }
+.btn.full { width: 100%; }
+.notice { padding: 14px 16px; border-radius: 18px; margin: 18px 0; }
+.notice.success { background: rgba(39,194,154,.16); border: 1px solid rgba(39,194,154,.25); }
+.notice.error { background: rgba(255,107,125,.16); border: 1px solid rgba(255,107,125,.25); }
+.slot-grid { display: flex; flex-wrap: wrap; gap: 10px; min-height: 46px; margin-top: 10px; }
+.slot-btn {
+  border: 1px solid var(--line); padding: 10px 12px; border-radius: 14px; background: rgba(255,255,255,.08); color: var(--text); cursor: pointer;
+}
+.slot-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; }
+.barber-cards { display: grid; gap: 12px; }
+.barber-card, .list-row, .reservation-row {
+  display: flex; justify-content: space-between; gap: 14px; align-items: center; padding: 14px; border-radius: 18px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+}
+.avatar { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center; font-weight: 800; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.muted { color: var(--muted); }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.stat span { color: var(--muted); display: block; margin-bottom: 10px; }
+.stat strong { font-size: 2rem; }
+.list-table, .day-group { display: grid; gap: 10px; }
+.row-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.column-actions { align-items: flex-end; }
+.center-wrap { min-height: calc(100vh - 120px); display: grid; place-items: center; }
+.narrow { width: min(100%, 420px); }
+.ticket { max-width: 760px; margin: 0 auto; }
+.ticket-top { display: flex; justify-content: space-between; gap: 14px; align-items: center; }
+.accent { color: #ffbed7; }
+.ticket-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 24px; }
+.ticket-grid div, .ticket-notes { padding: 14px; background: rgba(255,255,255,.05); border-radius: 18px; border: 1px solid rgba(255,255,255,.08); }
+.ticket-grid span, .ticket-notes span { display: block; color: var(--muted); margin-bottom: 8px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.title-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+.stack-form > * { margin-bottom: 10px; }
+.schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.schedule-card { padding: 14px; border-radius: 18px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); }
+.checkline { display: flex; align-items: center; gap: 10px; }
+.checkline input { width: auto; margin: 0; }
+.inline-form { display: flex; gap: 8px; align-items: center; }
+.reservation-form { position: sticky; top: 86px; }
+@media (max-width: 920px) {
+  .two-col, .stats-grid, .ticket-grid { grid-template-columns: 1fr; }
+  .hero, .topbar, .ticket-top { flex-direction: column; align-items: flex-start; }
+  .reservation-form { position: static; }
+}

@@ -1,0 +1,153 @@
+<%- include('partials/header', { title: 'Admin dashboard' }) %>
+<section class="title-row">
+  <div>
+    <span class="eyebrow">Admin</span>
+    <h1>Control your shop</h1>
+  </div>
+</section>
+<% if (message) { %><div class="notice success"><%= message %></div><% } %>
+<% if (error) { %><div class="notice error"><%= error %></div><% } %>
+
+<section class="stats-grid">
+  <div class="card stat"><span>Total barbers</span><strong><%= stats.totalBarbers %></strong></div>
+  <div class="card stat"><span>Total reservations</span><strong><%= stats.totalReservations %></strong></div>
+  <div class="card stat"><span>Upcoming</span><strong><%= stats.upcomingReservations %></strong></div>
+</section>
+
+<section class="grid two-col stack-top">
+  <div class="card">
+    <h2>Shop settings</h2>
+    <form method="post" action="/admin/settings" class="stack-form">
+      <label>Shop name<input name="shop_name" value="<%= settings.shop_name %>" required /></label>
+      <label>Location<input name="shop_location" value="<%= settings.shop_location %>" required /></label>
+      <label>Headline<input name="shop_headline" value="<%= settings.shop_headline %>" required /></label>
+      <label>WhatsApp number<input name="shop_whatsapp" value="<%= settings.shop_whatsapp %>" placeholder="972..." /></label>
+      <label>Admin PIN<input name="admin_pin" value="<%= settings.admin_pin %>" required /></label>
+      <button class="btn primary" type="submit">Save settings</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Add barber</h2>
+    <form method="post" action="/admin/barbers" class="stack-form">
+      <label>Name<input name="name" required /></label>
+      <label>Specialty<input name="specialty" /></label>
+      <label>Phone<input name="phone" /></label>
+      <label>Email<input name="email" /></label>
+      <label>Barber PIN<input name="pin" required /></label>
+      <label>Photo URL<input name="photo_url" placeholder="https://..." /></label>
+      <button class="btn primary" type="submit">Add barber</button>
+    </form>
+  </div>
+</section>
+
+<section class="grid two-col stack-top">
+  <div class="card">
+    <h2>Barbers</h2>
+    <div class="list-table">
+      <% barbers.forEach(barber => { %>
+        <div class="list-row">
+          <div>
+            <strong><%= barber.name %></strong>
+            <div class="muted"><%= barber.specialty || 'Barber' %> · PIN <%= barber.pin %></div>
+          </div>
+          <div class="row-actions">
+            <a class="btn small" href="/admin/barbers/<%= barber.id %>/edit">Edit</a>
+            <form method="post" action="/admin/barbers/<%= barber.id %>/delete">
+              <button class="btn danger small" type="submit">Disable</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Add reservation</h2>
+    <form method="post" action="/admin/reservations" class="stack-form reservation-form slot-aware-form">
+      <label>Customer name<input name="customer_name" required /></label>
+      <label>Phone<input name="customer_phone" required /></label>
+      <label>Service<input name="service" required /></label>
+      <label>Barber
+        <select name="barber_id" class="slot-barber" required>
+          <option value="">Select barber</option>
+          <% barbers.filter(b=>b.active).forEach(barber => { %><option value="<%= barber.id %>"><%= barber.name %></option><% }) %>
+        </select>
+      </label>
+      <label>Date<input type="date" name="reservation_date" class="slot-date" required /></label>
+      <div>
+        <span class="label">Available times</span>
+        <div class="slot-grid dynamic-slots"><div class="muted">Choose barber and date first</div></div>
+        <input type="hidden" name="reservation_time" class="slot-time" required />
+      </div>
+      <label>Status
+        <select name="status"><option>confirmed</option><option>pending</option><option>done</option><option>cancelled</option></select>
+      </label>
+      <label>Notes<textarea name="notes" rows="3"></textarea></label>
+      <button class="btn primary" type="submit">Add reservation</button>
+    </form>
+  </div>
+</section>
+
+<section class="card stack-top">
+  <h2>Reservations by day and hour</h2>
+  <% if (!groupedReservations.length) { %><div class="muted">No reservations yet.</div><% } %>
+  <% groupedReservations.forEach(group => { %>
+    <div class="day-group">
+      <h3><%= group.date %></h3>
+      <% group.items.forEach(item => { %>
+        <div class="reservation-row">
+          <div>
+            <strong><%= item.reservation_time %> · <%= item.customer_number %> · <%= item.customer_name %></strong>
+            <div class="muted"><%= item.barber_name %> · <%= item.service %> · <%= item.customer_phone %> · <%= item.status %></div>
+          </div>
+          <div class="row-actions">
+            <a class="btn small" href="/admin/reservations/<%= item.id %>/edit">Edit</a>
+            <form method="post" action="/admin/reservations/<%= item.id %>/delete">
+              <button class="btn danger small" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% }) %>
+</section>
+
+<script>
+  document.querySelectorAll('.slot-aware-form').forEach(setupSlotForm);
+  function setupSlotForm(form) {
+    const barber = form.querySelector('.slot-barber');
+    const date = form.querySelector('.slot-date');
+    const slotWrap = form.querySelector('.dynamic-slots');
+    const slotTime = form.querySelector('.slot-time');
+    async function reload() {
+      slotTime.value = '';
+      if (!barber.value || !date.value) {
+        slotWrap.innerHTML = '<div class="muted">Choose barber and date first</div>';
+        return;
+      }
+      const r = await fetch(`/api/slots?barber_id=${barber.value}&date=${date.value}`);
+      const data = await r.json();
+      slotWrap.innerHTML = '';
+      if (!data.slots.length) {
+        slotWrap.innerHTML = '<div class="muted">No free time on this date</div>';
+        return;
+      }
+      data.slots.forEach(slot => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'slot-btn';
+        btn.textContent = slot;
+        btn.onclick = () => {
+          slotWrap.querySelectorAll('.slot-btn').forEach(x => x.classList.remove('active'));
+          btn.classList.add('active');
+          slotTime.value = slot;
+        };
+        slotWrap.appendChild(btn);
+      });
+    }
+    barber.addEventListener('change', reload);
+    date.addEventListener('change', reload);
+  }
+</script>
+<%- include('partials/footer') %>
